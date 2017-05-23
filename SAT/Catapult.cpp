@@ -1,6 +1,4 @@
-#include "Arduino.h"
 #include "Catapult.h"
-#include <Servo.h>
 
 Catapult::Catapult(int firePin, int armPin, int ballsPin, int platformPin) {
   fireServoPin = firePin;
