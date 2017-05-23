@@ -5,6 +5,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_NeoPixel.h>
 #include <Adafruit_NeoMatrix.h>
+#include <LiquidCrystal.h>
+
 
 
 /*to be able to use either a 16x2 lcd display with an I2C controller or a 
@@ -31,6 +33,10 @@ class Display {
     #ifdef neoPixelMatrix
       Adafruit_NeoMatrix myMatrix;
     #endif
+    #ifdef LMC1602
+      
+    #endif
+      
     
 };
 

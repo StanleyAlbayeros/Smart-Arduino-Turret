@@ -12,18 +12,35 @@
                                 NEO_GRB            + NEO_KHZ800){
       myMatrix.begin();
       myMatrix.setBrightness(10);
-    }
-
-    
+    }    
   #endif
 
   void Display::displayRange(uint8_t range){
 
     #ifdef neoPixelMatrix
+      //cambiar a setbrightness(range) o numero de leds encendidos dependiente de range?
       myMatrix.fillScreen(myMatrix.Color(255,0,255);
       myMatrix.show();
     #endif
 
+    #ifdef LMC1602
+      //display first line black squares depending on range
+    #endif
+
     
   }
+
+      void Display::preparing(){
+      
+    }
+
+    void Display::shooting(){
+      
+    }
+
+        void Display::scanning(){
+      
+    }
+
+
 
