@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['opengate',['openGate',['../class_catapult.html#a67141918881d6bf8ddd171dc9eb8d87f',1,'Catapult']]]
+  ['getdistancemap',['getDistanceMap',['../class_sensor.html#abb752f4a88eda6d4fd34f74cce1b82dc',1,'Sensor']]]
 ];
