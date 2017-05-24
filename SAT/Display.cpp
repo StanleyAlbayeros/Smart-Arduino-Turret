@@ -14,7 +14,7 @@ Display::Display(): myMatrix(8, 8, neomatrixPin,
                                + NEO_MATRIX_PROGRESSIVE,
                                NEO_GRB + NEO_KHZ800) {
   myMatrix.begin();
-  myMatrix.setBrightness(10);
+  myMatrix.setBrightness(5);
 }
 #endif
 

@@ -98,20 +98,23 @@ void loop() {
   
   if(available == 1)
   {
-    int receivedValue = Wire.read();
+    int receivedValue = Wire.read();   
+  Wire.endTransmission();
     if (receivedValue != 1){
       //scanning
     } else {
       //target found!
       currentCommand = 2;
+  Wire.beginTransmission(slaveID);
       Wire.write(currentCommand);
   Wire.endTransmission();
-  Wire.beginTransmission(slaveID);
        myCatapult.feedBall(); 
       // fire the ball
       myCatapult.prepareToShoot() ;  
       delay(2000);
       currentCommand = 4;
+      
+  Wire.beginTransmission(slaveID);
       Wire.write(currentCommand);
       myCatapult.shoot(); 
       myCatapult.rest(); 
