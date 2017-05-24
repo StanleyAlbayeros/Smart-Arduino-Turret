@@ -14,7 +14,7 @@ class Sensor {
     Sensor();
     Sensor(Ultrasonic mySensor);
     Sensor(int triggerPin, int echoPin);
-    bool detectTarget(int range);
+    bool Sensor::detectTarget(int range);
     uint8_t getDistanceMap();
 
   private:

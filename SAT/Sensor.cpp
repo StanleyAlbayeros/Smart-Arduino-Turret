@@ -19,10 +19,13 @@
   }
   
   bool Sensor::detectTarget(int range){
-    
+     int avgCount = 5;
+     int tempDistance = 0;
      //reads distance in centimeters
-     uint8_t distance = mySensor.distanceRead(CM);
-     
+     for (uint8_t i = 0; i < avgCount; i++){
+      tempDistance += mySensor.distanceRead(CM);
+     }
+     int distance = floor (tempDistance/avgCount);
      //maps the distance and desired range to a shorter of numbers
      uint8_t distanceMap = map(distance, 0, 250, 0, 100);
      uint8_t rangeMap = map(range, 0, 250, 0, 100);

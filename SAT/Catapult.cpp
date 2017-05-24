@@ -58,3 +58,15 @@ void Catapult::feedBall() {
   closeGate();
   delay(2000);
 }
+
+void Catapult::stepScan(){
+  if (currentScanDirection = 1){  
+    sweep(platformServo, platformServo.read(),platformServo.read() + scanStep,  15);
+  } else {
+    sweep(platformServo, platformServo.read(),platformServo.read() - scanStep,  15);
+  }
+  if (platformServo.read() < startScanAngle ||platformServo.read() > endScanAngle){
+    currentScanDirection = currentScanDirection * -1;
+  }
+}
+

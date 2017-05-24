@@ -16,6 +16,7 @@ class Catapult {
     void Catapult::openGate();
     void Catapult::closeGate();
     void Catapult::feedBall();
+    void Catapult::stepScan();
     
 
   private:
@@ -33,6 +34,12 @@ class Catapult {
     const int disarmedAngle = 140;   
     const int feedBalls     = 155;
     const int stopBalls     = 175;
+    const int startScanAngle = 100;
+    const int endScanAngle = 200;
+    
+    int currentScanDirection = 1;
+    int scanStep = 1;
+    int currentScanAngle = 100;
 };
 
 #endif
