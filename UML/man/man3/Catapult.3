@@ -1,4 +1,4 @@
-.TH "Catapult" 3 "Tue May 23 2017" "Smart Arduino Turret" \" -*- nroff -*-
+.TH "Catapult" 3 "Wed May 24 2017" "Smart Arduino Turret" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,6 +35,9 @@ Catapult
 .ti -1c
 .RI "void \fBfeedBall\fP ()"
 .br
+.ti -1c
+.RI "void \fBstepScan\fP ()"
+.br
 .in -1c
 .SH "Constructor & Destructor Documentation"
 .PP 
@@ -53,6 +56,8 @@ Catapult
 .SS "void Catapult::rest ()"
 
 .SS "void Catapult::shoot ()"
+
+.SS "void Catapult::stepScan ()"
 
 .SS "void Catapult::sweep (Servo servo, int originAngle, int destinationAngle, int speed)"
 
