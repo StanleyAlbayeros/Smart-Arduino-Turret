@@ -4,8 +4,6 @@
  * There should be no need to use an external pullup resistor since we are only using two arduinos 
  */
 
-#define slaveID 2
-
 #define MASTER
 //#define SLAVE
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -13,22 +11,24 @@
 
 #include <Servo.h>
 #include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
 #include "Catapult.h"
 #include "Sensor.h"
 #include "Display.h"
 
-
+static const uint8_t slaveID = 2;
 
 #ifdef MASTER
   #define firePin 3
   #define armPin 5
   #define ballsPin 6
-  #define platformPin 9
+  #define platformPin 0
 #endif
 
 
 #ifdef MASTER
-  Catapult myCatapult(firePin,armPin,ballsPin,platformPin);    
+  Adafruit_PWMServoDriver servos = Adafruit_PWMServoDriver();
+  Catapult myCatapult(servos, firePin,armPin,ballsPin,platformPin);    
   int currentCommand = 1;
   
 #endif
@@ -41,19 +41,15 @@
 void setup() {
   
 #ifdef MASTER
-  Wire.begin();
+ // Wire.begin();
 
   
+  servos.begin();
+  servos.setPWMFreq(50);
   
-  myCatapult.rest();
-  myCatapult.closeGate();
-  myCatapult.openGate();
+  myCatapult.rest(servos);
   delay(500);
-  
-  //myCatapult.prepareToShoot();
-  //myCatapult.shoot();
-  //myCatapult.rest();
-
+  myCatapult.feedBall(servos);
   
 #endif
 
@@ -108,16 +104,16 @@ void loop() {
   Wire.beginTransmission(slaveID);
       Wire.write(currentCommand);
   Wire.endTransmission();
-       myCatapult.feedBall(); 
+       myCatapult.feedBall(servos); 
       // fire the ball
-      myCatapult.prepareToShoot() ;  
+      myCatapult.prepareToShoot(servos) ;  
       delay(2000);
       currentCommand = 4;
       
   Wire.beginTransmission(slaveID);
       Wire.write(currentCommand);
-      myCatapult.shoot(); 
-      myCatapult.rest(); 
+      myCatapult.shoot(servos); 
+      myCatapult.rest(servos); 
 
       
     }

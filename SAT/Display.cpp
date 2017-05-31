@@ -51,7 +51,7 @@ void Display::shooting() {
     myMatrix.drawLine(i, 0, 7 - i, 7, colors[3]);
     myMatrix.drawLine(7, i, 0, 7 - i, colors[3]);
     myMatrix.show();
-    delay(50);
+    delay(5);
   }
   delay(10);
 #endif
@@ -67,7 +67,7 @@ void Display::scanning() {
     myMatrix.drawLine(i, 0, 7 - i, 7, colors[0]);
     myMatrix.drawLine(7, i, 0, 7 - i, colors[1]);
     myMatrix.show();
-    delay(50);
+    delay(10);
   }
   delay(10);
 #endif
@@ -75,16 +75,6 @@ void Display::scanning() {
 
 void Display::detected() {
 #ifdef neoPixelMatrix
-/*
-  myMatrix.setTextWrap(false);
-  myMatrix.setTextColor(colors[0]);
-  myMatrix.fillScreen(0);
-  myMatrix.setCursor(myMatrix.width(), 0);
-  myMatrix.print(F("Detected!"));
-  myMatrix.setTextColor(colors[1]);
-  myMatrix.show();
-  delay(100);
-  */
 
     for (uint16_t i = 0; i < 8; i++) {
     if (i % 3 == 0) {
@@ -94,7 +84,7 @@ void Display::detected() {
     myMatrix.drawLine(i, 0, 7 - i, 7, colors[0]);
     myMatrix.drawLine(7, i, 0, 7 - i, colors[2]);
     myMatrix.show();
-    delay(50);
+    delay(10);
   }
   delay(10);
 #endif

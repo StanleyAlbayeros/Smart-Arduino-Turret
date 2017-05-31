@@ -1,29 +1,32 @@
 #include "Catapult.h"
 
-Catapult::Catapult(int firePin, int armPin, int ballsPin, int platformPin) {
-  fireServoPin = firePin;
-  armServoPin = armPin;
-  ballsServoPin = ballsPin;
-  platformServoPin = platformPin;
-  fireServo.attach(3);
-  armServo.attach(5);
-  ballServo.attach(6);
-  platformServo.attach(9);
-  
-  
+Catapult::Catapult(Adafruit_PWMServoDriver &servoDriver, int firePin, int armPin, int ballsPin, int platformPin) {
+  fireServoID = firePin;
+  armServoID = armPin;
+  ballServoID = ballsPin;
+  platformServoID = platformPin;
+  /*
+    fireServo.attach(3);
+    armServo.attach(5);
+    ballServo.attach(6);
+    platformServo.attach(9);
+  */
 }
 
-void Catapult::sweep (Servo servo, int originAngle, int destinationAngle, int speed) {
-  int tempPosition = 0;
-
-  if (originAngle >= destinationAngle) {
-    for (tempPosition = originAngle; tempPosition >= destinationAngle; tempPosition--) {
-      servo.write(tempPosition);
+void Catapult::sweep (Adafruit_PWMServoDriver &servoDriver,int servoID, int originPulse, int destinationPulse, int speed) {
+  int tempPulse = 0;
+  
+     //servoDriver.setPWM(servoID, 0, destinationPulse);
+  if (originPulse >= destinationPulse) {
+    for (tempPulse = originPulse; tempPulse >= destinationPulse; tempPulse--) {
+      servoDriver.setPWM(servoID, 0, tempPulse);
+      //servo.write(tempPosition);
       delay(speed);
     }
   } else {
-    for (tempPosition = originAngle; tempPosition <= destinationAngle; tempPosition++) {
-      servo.write(tempPosition);
+    for (tempPulse = originPulse; tempPulse <= destinationPulse; tempPulse++) {
+      servoDriver.setPWM(servoID, 0, tempPulse);
+      //servo.write(tempPosition);
       delay(speed);
     }
   }
@@ -31,41 +34,50 @@ void Catapult::sweep (Servo servo, int originAngle, int destinationAngle, int sp
 
 
 
-void Catapult::rest() {
-  sweep(fireServo, fireServo.read(), releaseAngle, 15);
-  sweep(armServo, armServo.read(), disarmedAngle, 15);
+void Catapult::rest(Adafruit_PWMServoDriver &servoDriver) {
+  sweep(servoDriver, fireServoID, currentFireServoPulse, releasePulse, 15);
+  currentFireServoPulse = releasePulse;
+  sweep(servoDriver, armServoID, currentArmServoPulse, disarmedPulse, 15);
+  currentArmServoPulse = disarmedPulse;
 }
 
-void Catapult::prepareToShoot() {
-  sweep(fireServo, fireServo.read(), blockingAngle, 15) ;
-  sweep(armServo, armServo.read(), armedAngle, 15) ;
+void Catapult::prepareToShoot(Adafruit_PWMServoDriver &servoDriver) {
+  sweep(servoDriver, fireServoID, currentFireServoPulse, blockingPulse, 15) ;
+  currentFireServoPulse = blockingPulse;
+  sweep(servoDriver, armServoID, currentArmServoPulse, armedPulse, 15) ;
+  currentArmServoPulse = armedPulse;
 }
 
-void Catapult::shoot() {
-  sweep(fireServo, fireServo.read(), releaseAngle, 15);
+void Catapult::shoot(Adafruit_PWMServoDriver &servoDriver) {
+  sweep(servoDriver, fireServoID, currentFireServoPulse, releasePulse, 15);
+  currentFireServoPulse = releasePulse;
 }
 
-void Catapult::openGate() {
-  sweep(ballServo, ballServo.read(), feedBalls, 22) ;
+void Catapult::openGate(Adafruit_PWMServoDriver &servoDriver) {
+  sweep(servoDriver, ballServoID, currentBallServoPulse, feedBalls, 0) ;
+  currentBallServoPulse = feedBalls;
 }
 
-void Catapult::closeGate() {
-  sweep(ballServo, ballServo.read(), stopBalls, 15) ;
+void Catapult::closeGate(Adafruit_PWMServoDriver &servoDriver) {
+  sweep(servoDriver, ballServoID, currentBallServoPulse, stopBalls, 0) ;
+  currentBallServoPulse = stopBalls;
 }
 
-void Catapult::feedBall() {
-  openGate();
-  closeGate();
-  delay(2000);
+void Catapult::feedBall(Adafruit_PWMServoDriver &servoDriver) {
+  openGate(servoDriver);
+  closeGate(servoDriver);
+  delay(1000);
 }
 
-void Catapult::stepScan(){
-  if (currentScanDirection = 1){  
-    sweep(platformServo, platformServo.read(),platformServo.read() + scanStep,  15);
+void Catapult::stepScan(Adafruit_PWMServoDriver &servoDriver) {
+  if (currentScanDirection = 1) {
+    sweep(servoDriver, platformServoID, currentPlatformServoPulse, currentPlatformServoPulse + scanStep,  15);
+    currentPlatformServoPulse = currentPlatformServoPulse + scanStep;
   } else {
-    sweep(platformServo, platformServo.read(),platformServo.read() - scanStep,  15);
+    sweep(servoDriver, platformServoID, currentPlatformServoPulse, currentPlatformServoPulse - scanStep,  15);
+    currentPlatformServoPulse = currentPlatformServoPulse - scanStep;
   }
-  if (platformServo.read() < startScanAngle ||platformServo.read() > endScanAngle){
+  if (currentPlatformServoPulse <= startScanPulse || currentPlatformServoPulse >= endScanPulse) {
     currentScanDirection = currentScanDirection * -1;
   }
 }
