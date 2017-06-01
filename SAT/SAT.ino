@@ -19,37 +19,36 @@
 static const uint8_t slaveID = 2;
 
 #ifdef MASTER
+
   #define firePin 3
   #define armPin 5
   #define ballsPin 6
   #define platformPin 0
-#endif
-
-
-#ifdef MASTER
+  
   Adafruit_PWMServoDriver servos = Adafruit_PWMServoDriver();
   Catapult myCatapult(servos, firePin,armPin,ballsPin,platformPin);    
   int currentCommand = 1;
-  
+    
 #endif
 
 #ifdef SLAVE
+  #define detectionDistance 75
   Display myDisplay;  
   Sensor mySensor;
+
 #endif
 
 void setup() {
   
 #ifdef MASTER
- // Wire.begin();
-
-  
+  //Serial.begin(9600); 
   servos.begin();
+  
   servos.setPWMFreq(50);
   
   myCatapult.rest(servos);
   delay(500);
-  myCatapult.feedBall(servos);
+  //myCatapult.feedBall(servos);
   
 #endif
 
@@ -59,25 +58,8 @@ void setup() {
   Serial.begin(9600);  
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestSensorData);
-  
-
 
 #endif
-
-/*
-
-  // take the firing arm to it's resting position
-  rest();
-  
-  //load a ball into the catapult
-  closeGate();   
-  delay(2500);
-  feedBall(); 
-  // fire the ball
-  prepareToShoot() ;  
-  shoot(); 
-  rest(); 
-*/
 }
 
 void loop() {
@@ -85,65 +67,43 @@ void loop() {
   
 /////------------I2C MASTER CODE ----------------//////
   #ifdef MASTER
-  
   Wire.beginTransmission(slaveID);
   int available = Wire.requestFrom(slaveID, (uint8_t)1);
   
   currentCommand = 1;
   Wire.write(currentCommand);
   
-  if(available == 1)
+  if(available == 1)  
+  if(true)
   {
     int receivedValue = Wire.read();   
   Wire.endTransmission();
     if (receivedValue != 1){
       //scanning
+      myCatapult.stepScan(servos);
     } else {
       //target found!
       currentCommand = 2;
   Wire.beginTransmission(slaveID);
       Wire.write(currentCommand);
+      delay(500);
   Wire.endTransmission();
-       myCatapult.feedBall(servos); 
-      // fire the ball
+      myCatapult.feedBall(servos);
       myCatapult.prepareToShoot(servos) ;  
       delay(2000);
       currentCommand = 4;
       
   Wire.beginTransmission(slaveID);
-      Wire.write(currentCommand);
+      Wire.write(currentCommand);      
+      delay(500);
       myCatapult.shoot(servos); 
       myCatapult.rest(servos); 
 
       
     }
   }  
-      delay(250);
+      delay(100);
       Wire.endTransmission();
-/*
-  Wire.beginTransmission(slaveID);
-  currentCommand = 2;
-  Wire.write(currentCommand);
-  Wire.endTransmission();
-  delay(4000);
-*/
-
-  //while no target
-  //scan for targets
-  //send slave display::scanning command
-  //endwhile
-
-  //target found
-  //send slave display::targetaqcuired command
-  //sleep
-  //prepare to shoot
-  //send slave display::preparing command
-  
-  //sleep
-  //send slave display::shooting command
-  //shoot
-
-
   
   #endif
   
@@ -177,7 +137,7 @@ void receiveEvent(int howMany) {
 //SLAVE request event
 
 void requestSensorData(){
-    if (mySensor.detectTarget(100)){
+    if (mySensor.detectTarget(detectionDistance)){
       Wire.write(1);
     } else {
       Wire.write(0);
@@ -185,3 +145,4 @@ void requestSensorData(){
 }
 
 #endif  
+

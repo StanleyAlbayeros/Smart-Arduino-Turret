@@ -25,22 +25,8 @@ class Catapult {
     int armServoID;
     int ballServoID;
     int platformServoID;
-
-    /*
-    Servo platformServo;
-    Servo ballServo;
-    Servo fireServo;
-    Servo armServo;
-    const int releaseAngle  = 100;
-    const int blockingAngle = 20;  
-    const int armedAngle    = 50;
-    const int disarmedAngle = 140;   
-    const int startScanAngle = 100;
-    const int endScanAngle = 200;
-    */
     
-    // i2c pwm values//
-    
+    // i2c pwm values//    
     //fire servo
     const int releasePulse  = 325;
     const int blockingPulse = 150;  
@@ -50,12 +36,12 @@ class Catapult {
     const int disarmedPulse = 460; 
     
     //balls servo
-    const int feedBalls     = 410;
+    const int feedBalls     = 390;
     const int stopBalls     = 435;
     
     //platform servo
-    const int startScanPulse = 172;
-    const int endScanPulse = 460;
+    const int startScanPulse = 196;
+    const int endScanPulse = 484;
 
     int currentFireServoPulse = 300;
     int currentArmServoPulse = 400;
@@ -65,7 +51,7 @@ class Catapult {
     //Adafruit_PWMServoDriver servoDriver;
     int currentScanDirection = 1;
     int scanStep = 24;
-    int currentScanAngle = 100;
 };
 
 #endif
+

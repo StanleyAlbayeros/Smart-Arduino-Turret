@@ -38,11 +38,6 @@ void Display::displayRange(uint8_t range) {
 
 void Display::preparing() {
 #ifdef neoPixelMatrix
-#endif
-}
-
-void Display::shooting() {
-#ifdef neoPixelMatrix
     for (uint16_t i = 0; i < 8; i++) {
     if (i % 3 == 0) {
       //myMatrix.clear();
@@ -57,6 +52,13 @@ void Display::shooting() {
 #endif
 }
 
+void Display::shooting() {
+#ifdef neoPixelMatrix
+  myMatrix.fillScreen(colors[4]);
+
+#endif
+}
+
 void Display::scanning() {
 #ifdef neoPixelMatrix
   for (uint16_t i = 0; i < 8; i++) {
@@ -67,7 +69,7 @@ void Display::scanning() {
     myMatrix.drawLine(i, 0, 7 - i, 7, colors[0]);
     myMatrix.drawLine(7, i, 0, 7 - i, colors[1]);
     myMatrix.show();
-    delay(10);
+    delay(5);
   }
   delay(10);
 #endif
@@ -84,11 +86,12 @@ void Display::detected() {
     myMatrix.drawLine(i, 0, 7 - i, 7, colors[0]);
     myMatrix.drawLine(7, i, 0, 7 - i, colors[2]);
     myMatrix.show();
-    delay(10);
+    delay(5);
   }
   delay(10);
 #endif
 }
+
 
 
 
