@@ -5,18 +5,12 @@ Catapult::Catapult(Adafruit_PWMServoDriver &servoDriver, int firePin, int armPin
   armServoID = armPin;
   ballServoID = ballsPin;
   platformServoID = platformPin;
-  /*
-    fireServo.attach(3);
-    armServo.attach(5);
-    ballServo.attach(6);
-    platformServo.attach(9);
-  */
 }
 
-void Catapult::sweep (Adafruit_PWMServoDriver &servoDriver,int servoID, int originPulse, int destinationPulse, int speed) {
+void Catapult::sweep (Adafruit_PWMServoDriver &servoDriver, int servoID, int originPulse, int destinationPulse, int speed) {
   int tempPulse = 0;
-  
-     //servoDriver.setPWM(servoID, 0, destinationPulse);
+
+  //servoDriver.setPWM(servoID, 0, destinationPulse);
   if (originPulse >= destinationPulse) {
     for (tempPulse = originPulse; tempPulse >= destinationPulse; tempPulse--) {
       servoDriver.setPWM(servoID, 0, tempPulse);
@@ -70,47 +64,19 @@ void Catapult::feedBall(Adafruit_PWMServoDriver &servoDriver) {
 }
 
 void Catapult::stepScan(Adafruit_PWMServoDriver &servoDriver) {
-  /*
-    Serial.print("Current dir: "); 
-    Serial.print(currentScanDirection);
-    */
   if (currentScanDirection == 1) {
-    /*
-    Serial.print("  dir 1 - current: ");
-    Serial.print(currentPlatformServoPulse);
-    Serial.print(" to: ");
-    Serial.print(currentPlatformServoPulse + scanStep);
-    */
     sweep(servoDriver, platformServoID, currentPlatformServoPulse, currentPlatformServoPulse + scanStep,  15);
     currentPlatformServoPulse = currentPlatformServoPulse + scanStep;
   } else if (currentScanDirection == -1) {
-    /*
-    Serial.print(" dir -1 - current: ");
-    Serial.print(currentPlatformServoPulse);
-    Serial.print(" to: ");
-    Serial.print(currentPlatformServoPulse - scanStep);
-    */
     sweep(servoDriver, platformServoID, currentPlatformServoPulse, currentPlatformServoPulse - scanStep,  15);
     currentPlatformServoPulse = currentPlatformServoPulse - scanStep;
   }
-  
-  if (currentPlatformServoPulse <= startScanPulse){
-    /*
-    Serial.print(" change  dir to 1 ");
-    */
-    currentScanDirection = 1;
-    //sweep(servoDriver, platformServoID, currentPlatformServoPulse, startScanPulse + scanStep,  15);
-    //currentPlatformServoPulse = startScanPulse + scanStep;
-  } else if (currentPlatformServoPulse >= endScanPulse) {
-    /*
-    Serial.print(" change  dir to -1 ");
-    */
-    currentScanDirection = -1;
-    //sweep(servoDriver, platformServoID, currentPlatformServoPulse, endScanPulse - scanStep,  15);
-    //currentPlatformServoPulse = endScanPulse - scanStep;
-  }
 
-  //Serial.println(currentPlatformServoPulse);
+  if (currentPlatformServoPulse <= startScanPulse) {
+    currentScanDirection = 1;
+  } else if (currentPlatformServoPulse >= endScanPulse) {
+    currentScanDirection = -1;
+  }
   return currentPlatformServoPulse;
 }
 
