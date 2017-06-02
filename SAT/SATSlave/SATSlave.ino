@@ -6,14 +6,14 @@
 
 static const uint8_t slaveID = 2;
 
-  #define detectionDistance 75
-  Display myDisplay;  
-  Sensor mySensor;
+#define detectionDistance 75
+Display myDisplay;
+Sensor mySensor;
 
 void setup() {
-  
+
   Wire.begin(slaveID);
-  Serial.begin(9600);  
+  Serial.begin(9600);
   Wire.onReceive(receiveEvent);
   Wire.onRequest(requestSensorData);
 }
@@ -28,26 +28,26 @@ int byteIndex = 1;
 void receiveEvent(int howMany) {
   int x = Wire.read();    // receive byte as an integer
 
-  switch (x){
+  switch (x) {
     case 1: myDisplay.scanning();
-    break;
+      break;
     case 2: myDisplay.detected();
-    break;
+      break;
     case 3: myDisplay.preparing();
-    break;
+      break;
     case 4: myDisplay.shooting();
-    break;
+      break;
   }
 }
 
 //SLAVE request event
 
-void requestSensorData(){
-    if (mySensor.detectTarget(detectionDistance)){
-      Wire.write(1);
-    } else {
-      Wire.write(0);
-    }
+void requestSensorData() {
+  if (mySensor.detectTarget(detectionDistance)) {
+    Wire.write(1);
+  } else {
+    Wire.write(0);
+  }
 }
 
 

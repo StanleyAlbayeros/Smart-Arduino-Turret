@@ -7,7 +7,7 @@
 #define DEFAULT_TRIGGER_PIN 3
 #define DEFAULT_ECHO_PIN 2
 
-    
+
 class Sensor {
 
   public:
